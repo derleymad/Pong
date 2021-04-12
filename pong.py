@@ -40,6 +40,55 @@ def larguraDosJogadores():
 def alturaDosJogadores():
     return 3 * tamanhoDaBola
 
+def atualizar():
+    global xBola, yBola, velocidadeDaBolaEmX, velocidadeDaBolaEmY, yDoJogador1, yDoJogador2, velocidadeDoJogadorEmY, TamanhoDoJogador
+
+    xBola = xBola + velocidadeDaBolaEmX
+    yBola = yBola + velocidadeDaBolaEmY
+
+    # Verifica se o jogador 2 rebateu a bola
+    if (xBola + tamanhoDaBola / 2 > xDoJogador2() - larguraDosJogadores() / 2
+    and yBola - tamanhoDaBola / 2 < yDoJogador2 + alturaDosJogadores() / 2
+    and yBola + tamanhoDaBola / 2 > yDoJogador2 - alturaDosJogadores() / 2):
+        velocidadeDaBolaEmX = -velocidadeDaBolaEmX
+
+    # Verifica se o jogador 1 rebateu a bola
+    if (xBola - tamanhoDaBola / 2 < xDoJogador1() + larguraDosJogadores() / 2
+    and yBola - tamanhoDaBola / 2 < yDoJogador1 + alturaDosJogadores() / 2
+    and yBola + tamanhoDaBola / 2 > yDoJogador1 - alturaDosJogadores() / 2):
+        velocidadeDaBolaEmX = -velocidadeDaBolaEmX
+
+    # Atualiza o movimento da bola ao ser rebatida pelo jogador 2
+    if yBola + tamanhoDaBola / 2 > ALTURA_JANELA / 2:
+        velocidadeDaBolaEmY = -velocidadeDaBolaEmY
+
+    # Atualiza o movimento da bola ao ser rebatida pelo jogador 1
+    if yBola - tamanhoDaBola / 2 < -ALTURA_JANELA / 2:
+        velocidadeDaBolaEmY = -velocidadeDaBolaEmY
+
+    # Verifica se um ponto foi marcado e centraliza a bola
+    if xBola < -LARGURA_JANELA / 2 or xBola > LARGURA_JANELA / 2:
+        xBola = 0
+        yBola = 0
+
+    keys = pygame.key.get_pressed()
+
+    yDoJogador2 = yDoJogador2 + velocidadeDoJogadorEmY
+
+    if yDoJogador2 + TamanhoDoJogador / 2 > ALTURA_JANELA / 2:
+        velocidadeDoJogadorEmY = -velocidadeDoJogadorEmY
+
+    if yDoJogador2 - TamanhoDoJogador / 2 < -ALTURA_JANELA / 2:
+        velocidadeDoJogadorEmY = -velocidadeDoJogadorEmY
+
+    # Verifica se a tecla "w" foi apertada e sobe o jogador 1
+    if keys[K_w]:
+        yDoJogador1 = yDoJogador1 + 0.3
+
+    #Verifica se a tecla "s" foi apertada e desce o jogador 1
+    if keys[K_s]:
+        yDoJogador1 = yDoJogador1 - 0.3
+
 def desenharRetangulo(x, y, largura, altura, r, g, b):
     glColor3f(r, g, b)
 
@@ -67,11 +116,12 @@ def desenhar():
 
     pygame.display.flip()
 
+    
 pygame.init()
 pygame.display.set_mode((LARGURA_JANELA, ALTURA_JANELA), DOUBLEBUF | OPENGL)
 
 while True:
-    # atualizar()
+    atualizar()
     desenhar()
     for event in pygame.event.get():
         if event.type == QUIT:
