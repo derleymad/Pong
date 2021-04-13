@@ -44,11 +44,7 @@ bolarect.center = (largura/2,altura/2)
 #para o dificil pode ser tipo velocidade = [40,40]
 
 while loopdojogo:
-    for evento in pygame.event.get():
-        if evento.type == QUIT:
-            loopdojogo = False
-            pygame.quit()
-            
+    
     relogio.tick(60) ## espera certos milesimos suficientes para ter 60 como fps
     tela.fill((branco))
 
@@ -60,3 +56,10 @@ while loopdojogo:
         velocidade[1] = -velocidade[1]
     tela.blit(bola,bolarect)
     pygame.display.flip()
+
+    for evento in pygame.event.get():
+        if evento.type == pygame.QUIT:
+            loopdojogo = False
+            pygame.quit()
+            
+    

@@ -73,20 +73,25 @@ def atualizar():
 
     keys = pygame.key.get_pressed()
 
-    yDoJogador2 = yDoJogador2 + velocidadeDoJogadorEmY
+    if(xBola > LARGURA_JANELA / 5):
+        if(yBola > yDoJogador2  and not (yDoJogador2 + TamanhoDoJogador > ALTURA_JANELA / 2)):
+            yDoJogador2 += velocidadeDoJogadorEmY
 
-    if yDoJogador2 + TamanhoDoJogador / 2 > ALTURA_JANELA / 2:
-        velocidadeDoJogadorEmY = -velocidadeDoJogadorEmY
+        elif(yBola < yDoJogador2 and not (yDoJogador2 - TamanhoDoJogador < - ALTURA_JANELA / 2)):
+            yDoJogador2 -= velocidadeDoJogadorEmY
 
-    if yDoJogador2 - TamanhoDoJogador / 2 < -ALTURA_JANELA / 2:
-        velocidadeDoJogadorEmY = -velocidadeDoJogadorEmY
+    # if yDoJogador2 + TamanhoDoJogador > ALTURA_JANELA / 2:
+    #     velocidadeDoJogadorEmY = -velocidadeDoJogadorEmY
+
+    # if yDoJogador2 - TamanhoDoJogador < -ALTURA_JANELA / 2:
+    #     velocidadeDoJogadorEmY = -velocidadeDoJogadorEmY
 
     # Verifica se a tecla "w" foi apertada e sobe o jogador 1
-    if keys[K_w]:
+    if(keys[K_w] and not (yDoJogador1 + TamanhoDoJogador > ALTURA_JANELA / 2)):
         yDoJogador1 = yDoJogador1 + 0.3
 
     #Verifica se a tecla "s" foi apertada e desce o jogador 1
-    if keys[K_s]:
+    if(keys[K_s] and not (yDoJogador1 - TamanhoDoJogador < - ALTURA_JANELA / 2)):
         yDoJogador1 = yDoJogador1 - 0.3
 
 def desenharRetangulo(x, y, largura, altura, r, g, b):
