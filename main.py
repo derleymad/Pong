@@ -36,7 +36,7 @@ altura = 600
 tela = pygame.display.set_mode((largura,altura))
 
 # IMPORTA A BOLA 
-bola = pygame.image.load("/home/maquina/Desktop/Pong/bola1.png")
+bola = pygame.image.load("bola2.png")
 bola = pygame.transform.scale(bola, (scale, scale))
 bolarect = bola.get_rect()
 
