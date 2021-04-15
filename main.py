@@ -2,8 +2,11 @@ import sys
 import pygame
 from pygame.locals import *
 
-#Variáveis Globais
+############################ Variáveis Globais ####################################
+
 loopdojogo = True
+
+numeroJogadores = 2
 
 branco = (255,255,255)
 preto = (0,0,0,0)
@@ -22,17 +25,26 @@ yJogador2 = 0
 
 scale = 25
 
-###################################################
+##################  INFORMACOES DA TELA ##############################
 
 pygame.init()
 
-
-# INFORMACOES DA TELA
 relogio = pygame.time.Clock()
+
 largura = 800
 altura = 600
 
 tela = pygame.display.set_mode((largura,altura))
+
+###################  IMPORTA A BOLA  #################################
+
+bola = pygame.image.load("bola3.png")
+bola = pygame.transform.scale(bola, (scale, scale))
+bolarect = bola.get_rect()
+bolarect.center = (largura/2,altura/2)
+alturaInicial = (altura/2)-40
+
+################### FUNCOES E CLASSES #################################
 
 class jogador():
     def __init__(self, posX, posY, largura, altura, alturaInicial):
@@ -67,40 +79,25 @@ class jogador():
             self.alturaInicial = self.alturaInicial + 5
         #placar(self.alturaInicial, 200, 200, branco)
 
+jogador1 = jogador(20, (altura/2)-40, 20, 80, alturaInicial)
+jogador2 = jogador(largura-40, (altura/2)-40, 20, 80, alturaInicial)
+
 
 def placar(pontos, posX, posY, cor):
+
     num = str(pontos)
     fontesys = pygame.font.SysFont(None, 100)
     pontuacao = fontesys.render(num, 1, cor)
     tela.blit(pontuacao,(posX, posY))
 
-def desenha_interface():
+def desenha_campo():
+
+
     pygame.draw.rect(tela, branco, [0, altura-20, largura, 20])
     pygame.draw.rect(tela, branco, [0, 0, largura, 20])
     pygame.draw.line(tela, branco, (largura/2,0), (largura/2,altura), 20)
 
-
-# IMPORTA A BOLA 
-bola = pygame.image.load("bola1.png")
-bola = pygame.transform.scale(bola, (scale, scale))
-bolarect = bola.get_rect()
-
-bolarect.center = (largura/2,altura/2)
-
-alturaInicial = (altura/2)-40
-jogador1 = jogador(20, (altura/2)-40, 20, 80, alturaInicial)
-jogador2 = jogador(largura-40, (altura/2)-40, 20, 80, alturaInicial)
-
-numeroJogadores = 2
-
-while loopdojogo:
-    
-    tela.fill((preto))
-
-    #Desenha interface game
-
-    desenha_interface()
-
+def desenha_jogadores():
     jogador1.desenhaJogador(tela, branco)
     jogador2.desenhaJogador(tela, branco)
 
@@ -110,6 +107,15 @@ while loopdojogo:
     else:
         jogador1.movimentacaoBarra1(altura)
         jogador2.movimentacaoBarra2(altura)
+
+def jogo():
+    global pontuacaoJogador1,pontuacaoJogador2,bolarect
+    
+    tela.fill((preto))
+    #Desenha interface game
+
+    desenha_campo()
+    desenha_jogadores()
 
     '''if bolarect.left <= 40 and bolarect.top >= jogador1Altura and bolarect.bottom <= alturaInicial + jogador1.altura:
         velocidade[0] = -velocidade[0]
@@ -161,3 +167,10 @@ while loopdojogo:
                 pygame.quit()
     
     relogio.tick(60) ## espera certos milesimos suficientes para ter 60 como fps
+
+def introducao():
+    print("teste")
+
+while loopdojogo:
+    introducao()
+    jogo()
