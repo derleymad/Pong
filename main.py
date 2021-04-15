@@ -1,3 +1,4 @@
+
 import sys
 import pygame
 from pygame.locals import *
@@ -35,7 +36,7 @@ altura = 600
 tela = pygame.display.set_mode((largura,altura))
 
 # IMPORTA A BOLA 
-bola = pygame.image.load("bola1.png")
+bola = pygame.image.load("/home/maquina/Desktop/Pong/bola1.png")
 bola = pygame.transform.scale(bola, (scale, scale))
 bolarect = bola.get_rect()
 
@@ -57,6 +58,10 @@ def placar(pontos, posX, posY, cor):
     pontuacao = fontesys.render(num, 1, cor)
     tela.blit(pontuacao,(posX, posY))
 
+def desenha_interface():
+    pygame.draw.rect(tela, branco, [0, altura-20, largura, 20])
+    pygame.draw.rect(tela, branco, [0, 0, largura, 20])
+    pygame.draw.line(tela, branco, (largura/2,0), (largura/2,altura), 20)
 
 bolarect.center = (largura/2,altura/2)
 
@@ -69,12 +74,9 @@ while loopdojogo:
     tela.fill((preto))
 
     #Desenha interface game
-    
-    pygame.draw.rect(tela, branco, [0, altura-20, largura, 20])
-    pygame.draw.rect(tela, branco, [0, 0, largura, 20])
-    pygame.draw.line(tela, branco, (largura/2,0), (largura/2,altura), 20)
-    
-    
+
+    desenha_interface()
+
     jogador1.desenhaJogador(tela, branco)
     jogador2.desenhaJogador(tela, branco)
 
@@ -92,10 +94,8 @@ while loopdojogo:
         velocidade[0] = -velocidade[0]
     
     #if
-
     if bolarect.right < 40 and bolarect.bottom > jogador1Altura: 
         velocidade[1] = -velocidade[1]
-
     placar(jogador1Altura, 100, 100, branco)'''
 
 
@@ -116,12 +116,12 @@ while loopdojogo:
 
 
     if bolarect.left < -scale:
-        pontuacaoJogador1 += 1
+        pontuacaoJogador2 += 1
         bolarect.center = (largura/2,altura/2)
         velocidade[0] = velocidadePadrao
 
     if bolarect.right > largura + scale:
-        pontuacaoJogador2 += 1
+        pontuacaoJogador1 += 1
         bolarect.center = (largura/2,altura/2)
         velocidade[0] = -velocidadePadrao
     
