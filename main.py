@@ -11,8 +11,16 @@ vermelho = (255,0,0)
 verde = (0,255,0) 
 azul = (0,0,255)
 
-velocidade = [10,10] #para o modo facil
+velocidade = [5,5] #para o modo facil
+velocidadePadrao = 5
 
+pontuacaoJogador1 = 0
+pontuacaoJogador2 = 0
+
+yJogador1 = 0
+yJogador2 = 0
+
+scale = 25
 
 ###################################################
 
@@ -21,45 +29,131 @@ pygame.init()
 
 # INFORMACOES DA TELA
 relogio = pygame.time.Clock()
-inf_tela = pygame.display.Info() #Da informacao de qual altura e qual largura  da tela
-altura = inf_tela.current_h
-largura = inf_tela.current_w
+largura = 800
+altura = 600
 
 tela = pygame.display.set_mode((largura,altura))
 
 # IMPORTA A BOLA 
 bola = pygame.image.load("bola1.png")
-bola = pygame.transform.scale(bola, (100, 100))
+bola = pygame.transform.scale(bola, (scale, scale))
 bolarect = bola.get_rect()
 
-# DESENHA RETANGULO
+class jogador():
+    def __init__(self, posX, posY, largura, altura):
+        self.xJogador = posX
+        self.yJogador = posY
+        self.largura = largura
+        self.altura = altura
+
+    def desenhaJogador(self, superficie, cor):
+        pygame.draw.rect(superficie, cor, [self.xJogador, self.yJogador, self.largura, self.altura])
 
 
-#player1 = pygame.draw.rect(tela,[0,0,0],[50,50,90,90],0)
+# DESENHA PLACAR
+def placar(pontos, posX, posY, cor):
+    num = str(pontos)
+    fontesys = pygame.font.SysFont(None, 100)
+    pontuacao = fontesys.render(num, 1, cor)
+    tela.blit(pontuacao,(posX, posY))
+
 
 bolarect.center = (largura/2,altura/2)
 
-
-
-#para o dificil pode ser tipo velocidade = [40,40]
+jogador1 = jogador(20, (altura/2)-40, 20, 80)
+jogador2 = jogador(largura-40, (altura/2)-40, 20, 80)
+jogador1Altura = (altura/2)-40
 
 while loopdojogo:
     
-    relogio.tick(60) ## espera certos milesimos suficientes para ter 60 como fps
-    tela.fill((branco))
+    tela.fill((preto))
 
+    #Desenha interface game
+    
+    pygame.draw.rect(tela, branco, [0, altura-20, largura, 20])
+    pygame.draw.rect(tela, branco, [0, 0, largura, 20])
+    pygame.draw.line(tela, branco, (largura/2,0), (largura/2,altura), 20)
+    
+    
+    jogador1.desenhaJogador(tela, branco)
+    jogador2.desenhaJogador(tela, branco)
+
+    #MOVIMENTAÇÃO DA BARRA
+    keys = pygame.key.get_pressed()
+    if keys[K_w] and not jogador1Altura <= 20:
+        jogador1.yJogador -= 5
+        jogador1Altura = jogador1Altura - 5
+
+    if keys[K_s] and not jogador1Altura >= altura-(jogador1.altura+20):
+        jogador1.yJogador += 5
+        jogador1Altura = jogador1Altura + 5
+
+    '''if bolarect.left <= 40 and bolarect.top >= jogador1Altura and bolarect.bottom <= jogador1Altura + jogador1.altura:
+        velocidade[0] = -velocidade[0]
+    
+    #if
+
+    if bolarect.right < 40 and bolarect.bottom > jogador1Altura: 
+        velocidade[1] = -velocidade[1]
+
+    placar(jogador1Altura, 100, 100, branco)'''
+
+
+
+    #desenhaJogador()
+    #if jogador == 2: jogador2 = pygame.draw.rect(tela, branco, [largura-40, altura/2-40, 20, 80])
+    #jogador1 = pygame.draw.rect(tela, branco, [20, altura/2-40, 20, 80])
+    #jogador2 = pygame.draw.rect(tela, branco, [largura-40, altura/2-40, 20, 80])
+    
+    #PLACAR
+    if pontuacaoJogador1 >= 10:
+        placar(pontuacaoJogador1, largura/2-100, 30, branco)
+    else:
+        placar(pontuacaoJogador1, largura/2-60, 30, branco)
+    placar(pontuacaoJogador2, largura/2+25, 30, branco)
+    
     bolarect = bolarect.move(velocidade)
 
-    if bolarect.left < 0 or bolarect.right > largura:
-        velocidade[0] = -velocidade[0] ## faz com que bata nas paredes
-    if bolarect.top < 0 or bolarect.bottom > altura:
+
+    if bolarect.left < -scale:
+        pontuacaoJogador1 += 1
+        bolarect.center = (largura/2,altura/2)
+        velocidade[0] = velocidadePadrao
+
+    if bolarect.right > largura + scale:
+        pontuacaoJogador2 += 1
+        bolarect.center = (largura/2,altura/2)
+        velocidade[0] = -velocidadePadrao
+    
+
+
+    '''if bolarect.left < -scale or bolarect.right > largura+scale:
+        if verifica == 1:
+            velocidade[0]*-1
+            verifica = 0
+        else:
+            velocidade[0]*1
+            verifica = 1
+        bolarect.center = (largura/2,altura/2)'''
+        
+
+    #if bolarect.left < 0 or bolarect.right > largura+30:
+    #    bolarect.center = (largura/2,altura/2)
+    #if bolarect.left < 0 or bolarect.right > largura:
+    #    velocidade[0] = -velocidade[0] ## faz com que bata nas paredes
+    if bolarect.top < 20 or bolarect.bottom > altura-20:
         velocidade[1] = -velocidade[1]
     tela.blit(bola,bolarect)
+
     pygame.display.flip()
 
     for evento in pygame.event.get():
         if evento.type == pygame.QUIT:
             loopdojogo = False
             pygame.quit()
-            
+        if evento.type == pygame.KEYDOWN:
+            if evento.key == pygame.K_ESCAPE:
+                loopdojogo = False
+                pygame.quit()
     
+    relogio.tick(60) ## espera certos milesimos suficientes para ter 60 como fps
