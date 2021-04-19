@@ -162,10 +162,12 @@ def jogo():
         if evento.type == pygame.QUIT:
             loopdojogo = False
             pygame.quit()
+            exit()
         if evento.type == pygame.KEYDOWN:
             if evento.key == pygame.K_ESCAPE:
                 loopdojogo = False
                 pygame.quit()
+                exit()
     relogio.tick(60) ## espera certos milesimos suficientes para ter 60 como fps
 
 def introducao():
