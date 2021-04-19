@@ -8,11 +8,15 @@ loopdojogo = True
 
 numeroJogadores = 2
 
+G = 20
+
 branco = (255,255,255)
 preto = (0,0,0,0)
 vermelho = (255,0,0)
 verde = (0,255,0) 
 azul = (0,0,255)
+tam = 100
+cores = (vermelho,azul,verde,preto)
 
 velocidade = [5,5] #para o modo facil
 velocidadePadrao = 5
@@ -38,7 +42,7 @@ tela = pygame.display.set_mode((largura,altura))
 
 ###################  IMPORTA A BOLA  #################################
 
-bola = pygame.image.load("bola3.png")
+bola = pygame.image.load("bola1.png")
 bola = pygame.transform.scale(bola, (scale, scale))
 bolarect = bola.get_rect()
 bolarect.center = (largura/2,altura/2)
@@ -82,17 +86,14 @@ class jogador():
 jogador1 = jogador(20, (altura/2)-40, 20, 80, alturaInicial)
 jogador2 = jogador(largura-40, (altura/2)-40, 20, 80, alturaInicial)
 
-
-def placar(pontos, posX, posY, cor):
+def placar(pontos, posX, posY, cor,tam):
 
     num = str(pontos)
-    fontesys = pygame.font.SysFont(None, 100)
+    fontesys = pygame.font.SysFont(None, tam)
     pontuacao = fontesys.render(num, 1, cor)
     tela.blit(pontuacao,(posX, posY))
 
 def desenha_campo():
-
-
     pygame.draw.rect(tela, branco, [0, altura-20, largura, 20])
     pygame.draw.rect(tela, branco, [0, 0, largura, 20])
     pygame.draw.line(tela, branco, (largura/2,0), (largura/2,altura), 20)
@@ -109,7 +110,7 @@ def desenha_jogadores():
         jogador2.movimentacaoBarra2(altura)
 
 def jogo():
-    global pontuacaoJogador1,pontuacaoJogador2,bolarect
+    global pontuacaoJogador1,pontuacaoJogador2,bolarect,loopdojogo
     
     tela.fill((preto))
     #Desenha interface game
@@ -127,10 +128,10 @@ def jogo():
 
     #PLACAR
     if pontuacaoJogador1 >= 10:
-        placar(pontuacaoJogador1, largura/2-100, 30, branco)
+        placar(pontuacaoJogador1, largura/2-100, 30, branco,tam)
     else:
-        placar(pontuacaoJogador1, largura/2-60, 30, branco)
-    placar(pontuacaoJogador2, largura/2+25, 30, branco)
+        placar(pontuacaoJogador1, largura/2-60, 30, branco,tam)
+    placar(pontuacaoJogador2, largura/2+25, 30, branco,tam)
     
     bolarect = bolarect.move(velocidade)
 
@@ -165,12 +166,82 @@ def jogo():
             if evento.key == pygame.K_ESCAPE:
                 loopdojogo = False
                 pygame.quit()
-    
     relogio.tick(60) ## espera certos milesimos suficientes para ter 60 como fps
 
 def introducao():
-    print("teste")
+    global preto,branco,cores,altura,velocidade, G, relogio
+
+    for evento in pygame.event.get():
+        if evento.type == pygame.QUIT:
+             loopdojogo = False
+             pygame.quit()
+    
+    tela.fill(preto)
+    pygame.time.delay(1000)
+    for i in range(50):
+        tela.fill(preto)
+        placar("Uma produção de:",250,250,branco,i)
+        placar("Equipe 4",0+(i*6.6),300,branco,50)
+        pygame.display.update()  
+        relogio.tick(100)
+
+    pygame.time.delay(2000)
+
+    tela.fill(preto)
+    
+    placar("P o",310,250,branco,tam)
+    placar("ng",430,250,branco,tam)
+    pygame.display.update()
+    pygame.time.delay(2000)
+    
+    clock = pygame.time.Clock()
+
+    comeca = True
+
+    acc_y = 0
+    acc_x = 0
+    pos = [largura/2,altura/2]
+
+    while comeca:
+        for ev in pygame.event.get():
+            if ev.type == pygame.QUIT:
+                comeca = False
+                pygame.quit()
+            if ev.type == pygame.KEYDOWN:
+                comeca = False
+            if ev.type == pygame.MOUSEBUTTONDOWN:
+                acc_y = -10
+                clock = pygame.time.Clock()
+
+        t = clock.get_time() / 1000
+        F = G * t
+        acc_y += F
+
+        if pos[1] > 400:
+            acc_y = -10
+            clock = pygame.time.Clock()
+        elif pos[1] < 0:
+            acc_y = 10
+            clock = pygame.time.Clock()
+
+        pos[1] += acc_y
+        tela.fill(preto)
+        placar("P",310,250,branco,tam)
+        placar("ng",430,250,branco,tam)
+        pygame.draw.circle(tela,branco, (pos[0], pos[1]), 20,10)
+
+        tempo = int(pygame.time.get_ticks()/1000)
+
+        if tempo > 4:
+            if tempo%2 == 0:
+                placar("[Aperte qualquer tecla para cotinuar]",largura/3.7,altura/1.4,branco,30)
+
+        pygame.display.update()
+        clock.tick(60)
+
+introducao()
 
 while loopdojogo:
-    introducao()
     jogo()
+
+pygame.quit()
