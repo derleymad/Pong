@@ -22,6 +22,7 @@ preto = (0,0,0,0)
 vermelho = (255,0,0)
 verde = (0,255,0) 
 azul = (0,0,255)
+cinza = (25,25,25)
 cores = (vermelho, azul, verde, preto)
 
 velocidadeXFacilPadrao = 5
@@ -71,9 +72,9 @@ class jogador():
             self.posicaoAnterior = self.yJogador
             self.yJogador += velocidade
 
-        #pontos(self.yJogador, 100, 100, branco)
-        #pontos(self.posicaoAnterior, 100, 200, branco)
-        #pontos(self.xJogador+self.largura, 200, 200, branco)
+        #texto(self.yJogador, 100, 100, branco)
+        #texto(self.posicaoAnterior, 100, 200, branco)
+        #texto(self.xJogador+self.largura, 200, 200, branco)
     
     def movimentacaoBarra2(self, alturaTotal, velocidade):
         keys = pygame.key.get_pressed()
@@ -86,7 +87,7 @@ class jogador():
             self.posicaoAnterior = self.yJogador
             self.yJogador += velocidade
 
-        #pontos(self.yJogador, 200, 200, branco)
+        #texto(self.yJogador, 200, 200, branco)
     
     def movimentacaoBarraBot(self, bola, alturaTotal, larguraTotal, velocidade):
         if bola.top < self.yJogador and not self.yJogador <= 20:
@@ -96,23 +97,51 @@ class jogador():
             self.posicaoAnterior = self.yJogador
             self.yJogador += velocidade
 
-        #pontos(self.yJogador, 200, 200, branco)
+        #texto(self.yJogador, 200, 200, branco)
 
 ##### FUNÇÕES #####
-def pontos(pontos, posX, posY, cor):
-    num = str(pontos)
-    fontesys = pygame.font.SysFont(None, 100)
+def texto(texto, posX, posY, cor, tamanhoFonte):
+    num = str(texto)
+    fontesys = pygame.font.SysFont(None, tamanhoFonte)
     pontuacao = fontesys.render(num, 1, cor)
     tela.blit(pontuacao,(posX, posY))
 
-def desenha_campo():
-    pygame.draw.rect(tela, branco, [0, altura-20, largura, 20])
-    pygame.draw.rect(tela, branco, [0, 0, largura, 20])
-    pygame.draw.line(tela, branco, (largura/2,0), (largura/2,altura), 20)
+def desenhaEscolheOpcao(opcao):
+    desenha_campo(cinza)
+    jogador1.desenhaJogador(tela, cinza)
+    jogador2.desenhaJogador(tela, cinza)
+    pygame.draw.rect(tela, branco, [largura/4, altura/3, largura/2, altura/3], border_radius = 20)
+    #Menu escolhe número de jogadores
+    if opcao == 1 :
+        texto('(1) - Um Jogador', largura/2-115, altura/2-50, preto, 45)
+        texto('(2) - Dois Jogadores ', largura/2-145, altura/2+10, preto, 45)
+    #Menu escolhe dificuldade
+    elif opcao == 2:
+        texto('(F) - Fácil', largura/2-75, altura/2-50, preto, 45)
+        texto('(D) - Difícil', largura/2-85, altura/2+10, preto, 45)
+    #Menu Pausa
+    else:
+        texto('(M) - Menu', largura/2-85, altura/2-70, preto, 45)
+        texto('(R) - Reiniciar Partida', largura/2-155, altura/2-15, preto, 45)
+        texto('(ESC) - Sair do Jogo', largura/2-155, altura/2+40, preto, 45)
+
+def desenha_campo(cor):
+    pygame.draw.rect(tela, cor, [0, altura-20, largura, 20])
+    pygame.draw.rect(tela, cor, [0, 0, largura, 20])
+    pygame.draw.line(tela, cor, (largura/2,0), (largura/2,altura), 20)
 
 def desenha_jogadores():
     jogador1.desenhaJogador(tela, branco)
     jogador2.desenhaJogador(tela, branco)
+
+def informacoes(numeroJogadores):
+    texto('ESC - Sair do Jogo',10,2,preto,26)
+    texto('P - Pausa',largura-85,2,preto,26)
+    if(numeroJogadores == 1):
+        texto('W - Move Para Cima        S - Move Para Baixo', 10, altura-15, preto, 20)
+    else:
+        texto('W - Move Para Cima        S - Move Para Baixo', 10, altura-15, preto, 20)
+        texto('↑ - Move Para Cima        ↓ - Move Para Baixo', largura-285, altura-15, preto, 20)
 
 def movimenta_jogadores():
     if numeroJogadores == 1:
@@ -137,27 +166,21 @@ def colisao():
 
 def placar():
     if pontuacaoJogador1 >= 10:
-        pontos(pontuacaoJogador1, largura/2-100, 30, branco)
+        texto(pontuacaoJogador1, largura/2-100, 30, branco, 100)
     else:
-        pontos(pontuacaoJogador1, largura/2-60, 30, branco)
-    pontos(pontuacaoJogador2, largura/2+25, 30, branco)
-
-def aux_intro(pontos, posX, posY, cor, tam):
-    num = str(pontos)
-    fontesys = pygame.font.SysFont(None, tam)
-    pontuacao = fontesys.render(num, 1, cor)
-    tela.blit(pontuacao, (posX, posY))
+        texto(pontuacaoJogador1, largura/2-60, 30, branco, 100)
+    texto(pontuacaoJogador2, largura/2+25, 30, branco, 100)
 
 def pausa():
     pygame.draw.rect(tela, branco, [(largura/2)-50, (altura/2)-50, 300, 300])
 
 def jogo():
     global pontuacaoJogador1, pontuacaoJogador2, bolarect
-    pause = True
     
-    tela.fill((preto))
+    tela.fill(preto)
 
-    desenha_campo()
+    desenha_campo(branco)
+    informacoes(numeroJogadores)
     desenha_jogadores()
     movimenta_jogadores()
     colisao()
@@ -193,9 +216,6 @@ def jogo():
         loop = False
         pygame.quit()
         exit()
-    '''if keys[K_p]:
-        pausa()
-        loop = False'''
 
     pygame.display.flip()
 
@@ -213,8 +233,8 @@ def introducao():
     pygame.time.delay(1000)
     for i in range(50):
         tela.fill(preto)
-        aux_intro("Uma produção de:", 250, 250, branco, i)
-        aux_intro("Equipe 4", 0 + (i * 6.6), 300, branco, 50)
+        texto("Uma produção de:", 250, 250, branco, i)
+        texto("Equipe 4", 0 + (i * 6.6), 300, branco, 50)
         pygame.display.update()
         relogio.tick(100)
 
@@ -222,8 +242,8 @@ def introducao():
 
     tela.fill(preto)
 
-    aux_intro("P o", 310, 250, branco, tam)
-    aux_intro("ng", 430, 250, branco, tam)
+    texto("P o", 310, 250, branco, tam)
+    texto("ng", 430, 250, branco, tam)
     pygame.display.update()
     pygame.time.delay(2000)
 
@@ -259,15 +279,15 @@ def introducao():
 
         pos[1] += acc_y
         tela.fill(preto)
-        aux_intro("P", 310, 250, branco, tam)
-        aux_intro("ng", 430, 250, branco, tam)
+        texto("P", 310, 250, branco, tam)
+        texto("ng", 430, 250, branco, tam)
         pygame.draw.circle(tela, branco, (pos[0], pos[1]), 20, 10)
 
         tempo = int(pygame.time.get_ticks() / 1000)
 
         if tempo > 4:
             if tempo % 2 == 0:
-                aux_intro("[Aperte qualquer tecla para continuar]", largura / 3.7, altura / 1.4, branco, 30)
+                texto("[Aperte qualquer tecla para continuar]", largura / 3.7, altura / 1.4, branco, 30)
         pygame.display.update()
         clock.tick(60)
 
