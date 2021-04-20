@@ -30,6 +30,8 @@ velocidadeYFacilPadrao = 5
 velocidade = [velocidadeXFacilPadrao, velocidadeYFacilPadrao] # PARA O MODO FÁCIL
 velocidadePadrao = 5
 
+velocidadePadraoBOT = 4.5
+
 pontuacaoJogador1 = 0
 pontuacaoJogador2 = 0
 
@@ -146,7 +148,7 @@ def informacoes(numeroJogadores):
 def movimenta_jogadores():
     if numeroJogadores == 1:
         jogador1.movimentacaoBarra1(altura, velocidadePadrao)
-        jogador2.movimentacaoBarraBot(bolarect ,altura, largura, velocidadePadrao)
+        jogador2.movimentacaoBarraBot(bolarect ,altura, largura, velocidadePadraoBOT)
     else:
         jogador1.movimentacaoBarra1(altura, velocidadePadrao)
         jogador2.movimentacaoBarra2(altura, velocidadePadrao)
@@ -161,7 +163,6 @@ def colisao():
             velocidade[0] = -velocidade[0]
     
     '''if bolarect.left < jogador1.xJogador + jogador1.largura and jogador1.yJogador < bolarect.bottom and jogador1.yJogador + jogador1.altura > bolarect.top and bolarect.right > jogador1.xJogador + (jogador1.largura/2):
-
     if bolarect.right > jogador2.xJogador and jogador2.yJogador < bolarect.bottom and jogador2.yJogador + jogador2.altura > bolarect.top and bolarect.left < largura - (jogador2.largura/2):'''
 
 def placar():
