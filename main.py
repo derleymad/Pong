@@ -1,5 +1,6 @@
 import sys
 import pygame
+import pygame_menu
 from pygame.locals import *
 
 ##### INFORMAÇÕES DA TELA #####
@@ -9,19 +10,19 @@ relogio = pygame.time.Clock()
 largura = 800
 altura = 600
 
-tela = pygame.display.set_mode((largura,altura))
+tela = pygame.display.set_mode((largura, altura))
 
 ###### VARIÁVEIS GLOBAIS #####
 loopdojogo = True
 G = 20
 tam = 100
 
-branco = (255,255,255)
-preto = (0,0,0,0)
-vermelho = (255,0,0)
-verde = (0,255,0) 
-azul = (0,0,255)
-cinza = (25,25,25)
+branco = (255, 255, 255)
+preto = (0, 0, 0, 0)
+vermelho = (255, 0, 0)
+verde = (0, 255, 0)
+azul = (0, 0, 255)
+cinza = (25, 25, 25)
 cores = (vermelho, azul, verde, preto)
 
 velocidadeXFacilPadrao = 5
@@ -44,13 +45,14 @@ larguraJogadores = 20
 
 scale = 25
 
-alturaInicialBarra = (altura/2)-(alturaJogadores/2)
+alturaInicialBarra = (altura / 2) - (alturaJogadores / 2)
 
 ##### IMPORTANDO A BOLA  #####
 bola = pygame.image.load("bola1.png")
 bola = pygame.transform.scale(bola, (scale, scale))
 bolarect = bola.get_rect()
-bolarect.center = (largura/2,altura/2)
+bolarect.center = (largura / 2, altura / 2)
+
 
 ##### CLASSES #####
 class jogador():
@@ -63,7 +65,7 @@ class jogador():
 
     def desenhaJogador(self, superficie, cor):
         pygame.draw.rect(superficie, cor, [self.xJogador, self.yJogador, self.largura, self.altura])
-    
+
     def movimentacaoBarra1(self, alturaTotal, velocidade):
         keys = pygame.key.get_pressed()
 
@@ -71,10 +73,10 @@ class jogador():
             self.posicaoAnterior = self.yJogador
             self.yJogador -= velocidade
 
-        if keys[K_s] and not self.yJogador >= alturaTotal-(self.altura+20):
+        if keys[K_s] and not self.yJogador >= alturaTotal - (self.altura + 20):
             self.posicaoAnterior = self.yJogador
             self.yJogador += velocidade
-    
+
     def movimentacaoBarra2(self, alturaTotal, velocidade):
         keys = pygame.key.get_pressed()
 
@@ -82,33 +84,36 @@ class jogador():
             self.posicaoAnterior = self.yJogador
             self.yJogador -= velocidade
 
-        if keys[K_DOWN] and not self.yJogador >= alturaTotal-(self.altura+20):
+        if keys[K_DOWN] and not self.yJogador >= alturaTotal - (self.altura + 20):
             self.posicaoAnterior = self.yJogador
             self.yJogador += velocidade
-    
+
     def movimentacaoBarraBot(self, bola, alturaTotal, larguraTotal, velocidade):
         if bola.top < self.yJogador and not self.yJogador <= 20:
             self.posicaoAnterior = self.yJogador
             self.yJogador -= velocidade
-        elif bola.bottom > self.yJogador + 80 and not self.yJogador >= alturaTotal-(self.altura+20):
+        elif bola.bottom > self.yJogador + 80 and not self.yJogador >= alturaTotal - (self.altura + 20):
             self.posicaoAnterior = self.yJogador
             self.yJogador += velocidade
+
 
 ##### FUNÇÕES #####
 def texto(texto, posX, posY, cor, tamanhoFonte):
     num = str(texto)
     fontesys = pygame.font.SysFont(None, tamanhoFonte)
     pontuacao = fontesys.render(num, 1, cor)
-    tela.blit(pontuacao,(posX, posY))
+    tela.blit(pontuacao, (posX, posY))
+
 
 def desenhaEscolhe():
     tela.fill(preto)
     desenha_campo(cinza)
     jogador1.desenhaJogador(tela, cinza)
     jogador2.desenhaJogador(tela, cinza)
-    pygame.draw.rect(tela, branco, [largura/4, altura/3, largura/2, altura/3], border_radius = 20)
-    texto(0, largura/2-60, 30, cinza, 100)
-    texto(0, largura/2+25, 30, cinza, 100)
+    pygame.draw.rect(tela, branco, [largura / 4, altura / 3, largura / 2, altura / 3], border_radius=20)
+    texto(0, largura / 2 - 60, 30, cinza, 100)
+    texto(0, largura / 2 + 25, 30, cinza, 100)
+
 
 def desenhaEscolheNumJogadores():
     loop = True
@@ -116,8 +121,8 @@ def desenhaEscolheNumJogadores():
     while loop:
         desenhaEscolhe()
 
-        texto('(1) - Um Jogador', largura/2-115, altura/2-50, preto, 45)
-        texto('(2) - Dois Jogadores ', largura/2-145, altura/2+10, preto, 45)
+        texto('(1) - Um Jogador', largura / 2 - 115, altura / 2 - 50, preto, 45)
+        texto('(2) - Dois Jogadores ', largura / 2 - 145, altura / 2 + 10, preto, 45)
 
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
@@ -140,14 +145,15 @@ def desenhaEscolheNumJogadores():
         pygame.display.update()
     return numJogadores
 
+
 def desenhaEscolheDificuldade():
     loop = True
     dificuldade = 0
     while loop:
         desenhaEscolhe()
-        
-        texto('(F) - Fácil', largura/2-75, altura/2-50, preto, 45)
-        texto('(D) - Difícil', largura/2-85, altura/2+10, preto, 45)
+
+        texto('(F) - Fácil', largura / 2 - 75, altura / 2 - 50, preto, 45)
+        texto('(D) - Difícil', largura / 2 - 85, altura / 2 + 10, preto, 45)
 
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
@@ -170,58 +176,100 @@ def desenhaEscolheDificuldade():
         pygame.display.update()
     return dificuldade
 
+def escolheDificuldade():
+    dificuldade=0
+    for evento in pygame.event.get():
+        if evento.type == pygame.QUIT:
+            pygame.quit()
+            exit()
+
+        if evento.type == pygame.KEYDOWN:
+            if evento.key == pygame.K_1:
+                dificuldade = 1
+            elif evento.key == pygame.K_2:
+                dificuldade = 2
+            if evento.key == K_ESCAPE:
+                pygame.quit()
+                exit()
+    return dificuldade
+
+def escolheNumJogadores():
+    numeroJogadores=0
+    for evento in pygame.event.get():
+        if evento.type == pygame.QUIT:
+            pygame.quit()
+            exit()
+
+        if evento.type == pygame.KEYDOWN:
+            if evento.key == pygame.K_1:
+                numeroJogadores = 1
+            elif evento.key == pygame.K_2:
+                numeroJogadores = 2
+            if evento.key == K_ESCAPE:
+                pygame.quit()
+                exit()
+
+    return numeroJogadores
+
 def defineVelocidade(dificuldade):
     if dificuldade == 1:
-        velocidade = [velocidadeXFacilPadrao,velocidadeYFacilPadrao]
+        velocidade = [velocidadeXFacilPadrao, velocidadeYFacilPadrao]
     elif dificuldade == 2:
-        velocidade = [velocidadeXDificilPadrao,velocidadeYDificilPadrao]
+        velocidade = [velocidadeXDificilPadrao, velocidadeYDificilPadrao]
     return velocidade
 
+
 def desenha_campo(cor):
-    pygame.draw.rect(tela, cor, [0, altura-20, largura, 20])
+    pygame.draw.rect(tela, cor, [0, altura - 20, largura, 20])
     pygame.draw.rect(tela, cor, [0, 0, largura, 20])
-    pygame.draw.line(tela, cor, (largura/2,0), (largura/2,altura), 20)
+    pygame.draw.line(tela, cor, (largura / 2, 0), (largura / 2, altura), 20)
+
 
 def desenha_jogadores():
     jogador1.desenhaJogador(tela, branco)
     jogador2.desenhaJogador(tela, branco)
 
+
 def informacoes(numeroJogadores):
-    texto('ESC - Sair do Jogo',10,2,preto,26)
-    texto('P - Pausa',largura-85,2,preto,26)
-    if(numeroJogadores == 1):
-        texto('W - Move Para Cima        S - Move Para Baixo', 10, altura-15, preto, 20)
+    texto('ESC - Sair do Jogo', 10, 2, preto, 26)
+    texto('P - Pausa', largura - 85, 2, preto, 26)
+    if (numeroJogadores == 1):
+        texto('W - Move Para Cima        S - Move Para Baixo', 10, altura - 15, preto, 20)
     else:
-        texto('W - Move Para Cima        S - Move Para Baixo', 10, altura-15, preto, 20)
-        texto('↑ - Move Para Cima        ↓ - Move Para Baixo', largura-285, altura-15, preto, 20)
+        texto('W - Move Para Cima        S - Move Para Baixo', 10, altura - 15, preto, 20)
+        texto('↑ - Move Para Cima        ↓ - Move Para Baixo', largura - 285, altura - 15, preto, 20)
+
 
 def movimenta_jogadores():
     if numeroJogadores == 1:
         jogador1.movimentacaoBarra1(altura, velocidadePadrao)
-        jogador2.movimentacaoBarraBot(bolarect ,altura, largura, velocidadePadrao)
+        jogador2.movimentacaoBarraBot(bolarect, altura, largura, velocidadePadrao)
     else:
         jogador1.movimentacaoBarra1(altura, velocidadePadrao)
         jogador2.movimentacaoBarra2(altura, velocidadePadrao)
 
+
 def colisao():
     if bolarect.bottom > jogador1.yJogador and bolarect.top < jogador1.yJogador + jogador1.altura:
-        if velocidade[0] < 0 and bolarect.left < jogador1.xJogador+jogador1.largura:
+        if velocidade[0] < 0 and bolarect.left < jogador1.xJogador + jogador1.largura:
             velocidade[0] = -velocidade[0]
-    
+
     if bolarect.bottom > jogador2.yJogador and bolarect.top < jogador2.yJogador + jogador2.altura:
         if velocidade[0] > 0 and bolarect.right > jogador2.xJogador:
             velocidade[0] = -velocidade[0]
 
+
 def placar():
     if pontuacaoJogador1 >= 10:
-        texto(pontuacaoJogador1, largura/2-100, 30, branco, 100)
+        texto(pontuacaoJogador1, largura / 2 - 100, 30, branco, 100)
     else:
-        texto(pontuacaoJogador1, largura/2-60, 30, branco, 100)
-    texto(pontuacaoJogador2, largura/2+25, 30, branco, 100)
+        texto(pontuacaoJogador1, largura / 2 - 60, 30, branco, 100)
+    texto(pontuacaoJogador2, largura / 2 + 25, 30, branco, 100)
+
 
 def jogo():
     global pontuacaoJogador1, pontuacaoJogador2, bolarect, velocidade
-    
+
     tela.fill(preto)
 
     desenha_campo(branco)
@@ -230,27 +278,27 @@ def jogo():
     movimenta_jogadores()
     colisao()
     placar()
-    
+
     bolarect = bolarect.move(velocidade)
 
     # VERIFICA SE A BOLA SAIU, ADICIONA O PONTO E CENTRALIZA A BOLA
     if bolarect.left < -scale:
         pontuacaoJogador2 += 1
-        bolarect.center = (largura/2,altura/2)
+        bolarect.center = (largura / 2, altura / 2)
         velocidade = defineVelocidade(dificuldade)
         velocidade[0] = velocidade[0]
         velocidade[1] = velocidade[1]
 
     if bolarect.right > largura + scale:
         pontuacaoJogador1 += 1
-        bolarect.center = (largura/2,altura/2)
+        bolarect.center = (largura / 2, altura / 2)
         velocidade = defineVelocidade(dificuldade)
         velocidade[0] = -velocidade[0]
         velocidade[1] = velocidade[1]
 
-    if bolarect.top < 20 or bolarect.bottom > altura-20:
+    if bolarect.top < 20 or bolarect.bottom > altura - 20:
         velocidade[1] = -velocidade[1]
-    tela.blit(bola,bolarect)
+    tela.blit(bola, bolarect)
 
     for evento in pygame.event.get():
         if evento.type == pygame.QUIT:
@@ -265,7 +313,8 @@ def jogo():
 
     pygame.display.flip()
 
-    relogio.tick(60) ## espera certos milesimos suficientes para ter 60 como fps
+    relogio.tick(60)  ## espera certos milesimos suficientes para ter 60 como fps
+
 
 def introducao():
     global preto, branco, cores, altura, velocidade, G, relogio
@@ -337,13 +386,23 @@ def introducao():
         pygame.display.update()
         clock.tick(60)
 
+def menu():
+    surface = pygame.display.set_mode((altura, largura))
+    menu = pygame_menu.Menu(largura, altura, 'PONG',
+                            theme=pygame_menu.themes.THEME_DARK)
+
+    menu.add.selector('Dificuldade :', [('Fácil', 1), ('Difícil', 2)], onchange=escolheDificuldade())
+    menu.add.selector('Nº de jogadores :', [('1', 1), ('2', 2)], onchange=escolheNumJogadores())
+    #menu.add.selector('Velocidade :', [('1', 1), ('2', 2)], onchange=defineVelocidade)
+    menu.add.button('Jogar', jogo)
+    menu.add.button('Sair', pygame_menu.events.EXIT)
+    menu.mainloop(surface)
+
 jogador1 = jogador(0, alturaInicialBarra, larguraJogadores, alturaJogadores)
-jogador2 = jogador(largura-(larguraJogadores), alturaInicialBarra, larguraJogadores, alturaJogadores)
+jogador2 = jogador(largura - (larguraJogadores), alturaInicialBarra, larguraJogadores, alturaJogadores)
 
 introducao()
-numeroJogadores = desenhaEscolheNumJogadores()
-dificuldade = desenhaEscolheDificuldade()
-velocidade = defineVelocidade(dificuldade)
+menu()
 
 while loopdojogo:
     jogo()
