@@ -156,7 +156,7 @@ def escolheDificuldade():
                 elif evento.key == pygame.K_d:
                     jogador1.velocidade = 5.5
                     jogador2.velocidade = 5.5
-                    velocidadePadraoBot = 7.4
+                    velocidadePadraoBot = 7.43
                     dificuldade = 2
                     loop = False
                 if evento.key == K_ESCAPE:
