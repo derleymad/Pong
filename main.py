@@ -13,7 +13,6 @@ tela = pygame.display.set_mode((largura,altura))
 
 ###### VARIÁVEIS GLOBAIS #####
 loopdojogo = True
-numeroJogadores = 1
 G = 20
 tam = 100
 
@@ -27,7 +26,11 @@ cores = (vermelho, azul, verde, preto)
 
 velocidadeXFacilPadrao = 5
 velocidadeYFacilPadrao = 5
-velocidade = [velocidadeXFacilPadrao, velocidadeYFacilPadrao] # PARA O MODO FÁCIL
+
+velocidadeXDificilPadrao = 8
+velocidadeYDificilPadrao = 8
+
+# PARA O MODO FÁCIL
 velocidadePadrao = 5
 
 pontuacaoJogador1 = 0
@@ -71,10 +74,6 @@ class jogador():
         if keys[K_s] and not self.yJogador >= alturaTotal-(self.altura+20):
             self.posicaoAnterior = self.yJogador
             self.yJogador += velocidade
-
-        #texto(self.yJogador, 100, 100, branco)
-        #texto(self.posicaoAnterior, 100, 200, branco)
-        #texto(self.xJogador+self.largura, 200, 200, branco)
     
     def movimentacaoBarra2(self, alturaTotal, velocidade):
         keys = pygame.key.get_pressed()
@@ -86,8 +85,6 @@ class jogador():
         if keys[K_DOWN] and not self.yJogador >= alturaTotal-(self.altura+20):
             self.posicaoAnterior = self.yJogador
             self.yJogador += velocidade
-
-        #texto(self.yJogador, 200, 200, branco)
     
     def movimentacaoBarraBot(self, bola, alturaTotal, larguraTotal, velocidade):
         if bola.top < self.yJogador and not self.yJogador <= 20:
@@ -97,8 +94,6 @@ class jogador():
             self.posicaoAnterior = self.yJogador
             self.yJogador += velocidade
 
-        #texto(self.yJogador, 200, 200, branco)
-
 ##### FUNÇÕES #####
 def texto(texto, posX, posY, cor, tamanhoFonte):
     num = str(texto)
@@ -106,24 +101,81 @@ def texto(texto, posX, posY, cor, tamanhoFonte):
     pontuacao = fontesys.render(num, 1, cor)
     tela.blit(pontuacao,(posX, posY))
 
-def desenhaEscolheOpcao(opcao):
+def desenhaEscolhe():
+    tela.fill(preto)
     desenha_campo(cinza)
     jogador1.desenhaJogador(tela, cinza)
     jogador2.desenhaJogador(tela, cinza)
     pygame.draw.rect(tela, branco, [largura/4, altura/3, largura/2, altura/3], border_radius = 20)
-    #Menu escolhe número de jogadores
-    if opcao == 1 :
+    texto(0, largura/2-60, 30, cinza, 100)
+    texto(0, largura/2+25, 30, cinza, 100)
+
+def desenhaEscolheNumJogadores():
+    loop = True
+    numJogadores = 0
+    while loop:
+        desenhaEscolhe()
+
         texto('(1) - Um Jogador', largura/2-115, altura/2-50, preto, 45)
         texto('(2) - Dois Jogadores ', largura/2-145, altura/2+10, preto, 45)
-    #Menu escolhe dificuldade
-    elif opcao == 2:
+
+        for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                loopdo = False
+                pygame.quit()
+                exit()
+
+            if evento.type == pygame.KEYDOWN:
+                if evento.key == pygame.K_1:
+                    numJogadores = 1
+                    loop = False
+                elif evento.key == pygame.K_2:
+                    numJogadores = 2
+                    loop = False
+                if evento.key == K_ESCAPE:
+                    loop = False
+                    pygame.quit()
+                    exit()
+
+        pygame.display.update()
+    return numJogadores
+
+def desenhaEscolheDificuldade():
+    loop = True
+    dificuldade = 0
+    while loop:
+        desenhaEscolhe()
+        
         texto('(F) - Fácil', largura/2-75, altura/2-50, preto, 45)
         texto('(D) - Difícil', largura/2-85, altura/2+10, preto, 45)
-    #Menu Pausa
-    else:
-        texto('(M) - Menu', largura/2-85, altura/2-70, preto, 45)
-        texto('(R) - Reiniciar Partida', largura/2-155, altura/2-15, preto, 45)
-        texto('(ESC) - Sair do Jogo', largura/2-155, altura/2+40, preto, 45)
+
+        for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                loopdo = False
+                pygame.quit()
+                exit()
+
+            if evento.type == pygame.KEYDOWN:
+                if evento.key == pygame.K_f:
+                    dificuldade = 1
+                    loop = False
+                elif evento.key == pygame.K_d:
+                    dificuldade = 2
+                    loop = False
+                if evento.key == K_ESCAPE:
+                    loop = False
+                    pygame.quit()
+                    exit()
+
+        pygame.display.update()
+    return dificuldade
+
+def defineVelocidade(dificuldade):
+    if dificuldade == 1:
+        velocidade = [velocidadeXFacilPadrao,velocidadeYFacilPadrao]
+    elif dificuldade == 2:
+        velocidade = [velocidadeXDificilPadrao,velocidadeYDificilPadrao]
+    return velocidade
 
 def desenha_campo(cor):
     pygame.draw.rect(tela, cor, [0, altura-20, largura, 20])
@@ -159,10 +211,6 @@ def colisao():
     if bolarect.bottom > jogador2.yJogador and bolarect.top < jogador2.yJogador + jogador2.altura:
         if velocidade[0] > 0 and bolarect.right > jogador2.xJogador:
             velocidade[0] = -velocidade[0]
-    
-    '''if bolarect.left < jogador1.xJogador + jogador1.largura and jogador1.yJogador < bolarect.bottom and jogador1.yJogador + jogador1.altura > bolarect.top and bolarect.right > jogador1.xJogador + (jogador1.largura/2):
-
-    if bolarect.right > jogador2.xJogador and jogador2.yJogador < bolarect.bottom and jogador2.yJogador + jogador2.altura > bolarect.top and bolarect.left < largura - (jogador2.largura/2):'''
 
 def placar():
     if pontuacaoJogador1 >= 10:
@@ -171,11 +219,8 @@ def placar():
         texto(pontuacaoJogador1, largura/2-60, 30, branco, 100)
     texto(pontuacaoJogador2, largura/2+25, 30, branco, 100)
 
-def pausa():
-    pygame.draw.rect(tela, branco, [(largura/2)-50, (altura/2)-50, 300, 300])
-
 def jogo():
-    global pontuacaoJogador1, pontuacaoJogador2, bolarect
+    global pontuacaoJogador1, pontuacaoJogador2, bolarect, velocidade
     
     tela.fill(preto)
 
@@ -186,21 +231,22 @@ def jogo():
     colisao()
     placar()
     
-    keys = pygame.key.get_pressed()
     bolarect = bolarect.move(velocidade)
 
     # VERIFICA SE A BOLA SAIU, ADICIONA O PONTO E CENTRALIZA A BOLA
     if bolarect.left < -scale:
         pontuacaoJogador2 += 1
         bolarect.center = (largura/2,altura/2)
-        velocidade[0] = velocidadeXFacilPadrao
-        velocidade[1] = velocidadeYFacilPadrao
+        velocidade = defineVelocidade(dificuldade)
+        velocidade[0] = velocidade[0]
+        velocidade[1] = velocidade[1]
 
     if bolarect.right > largura + scale:
         pontuacaoJogador1 += 1
         bolarect.center = (largura/2,altura/2)
-        velocidade[0] = -velocidadeXFacilPadrao
-        velocidade[1] = velocidadeYFacilPadrao
+        velocidade = defineVelocidade(dificuldade)
+        velocidade[0] = -velocidade[0]
+        velocidade[1] = velocidade[1]
 
     if bolarect.top < 20 or bolarect.bottom > altura-20:
         velocidade[1] = -velocidade[1]
@@ -211,11 +257,11 @@ def jogo():
             loopdojogo = False
             pygame.quit()
             exit()
-
-    if keys[K_ESCAPE]:
-        loop = False
-        pygame.quit()
-        exit()
+        if evento.type == pygame.KEYDOWN:
+            if evento.key == K_ESCAPE:
+                loop = False
+                pygame.quit()
+                exit()
 
     pygame.display.flip()
 
@@ -295,5 +341,9 @@ jogador1 = jogador(0, alturaInicialBarra, larguraJogadores, alturaJogadores)
 jogador2 = jogador(largura-(larguraJogadores), alturaInicialBarra, larguraJogadores, alturaJogadores)
 
 introducao()
+numeroJogadores = desenhaEscolheNumJogadores()
+dificuldade = desenhaEscolheDificuldade()
+velocidade = defineVelocidade(dificuldade)
+
 while loopdojogo:
     jogo()
