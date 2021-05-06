@@ -2,6 +2,7 @@
 from Atributos import velocidadeXFacilPadrao, velocidadeYFacilPadrao, velocidadeXDificilPadrao, velocidadeYDificilPadrao
 from Funcoes import velocidade_barra_bot
 from Bola import define_velocidade_da_bola
+import pytest
 
 
 # Caixa Preta

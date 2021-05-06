@@ -44,12 +44,10 @@ def jogo(velocidade, numeroJogadores, dificuldade):
 
     for evento in pygame.event.get():
         if evento.type == pygame.QUIT:
-            loopdojogo = False
             pygame.quit()
             exit()
         if evento.type == pygame.KEYDOWN:
             if evento.key == K_ESCAPE:
-                loop = False
                 pygame.quit()
                 exit()
 
@@ -58,7 +56,7 @@ def jogo(velocidade, numeroJogadores, dificuldade):
     # ESPERA CERTOS MILÉSIMOS SUFICIENTE PARA TER 60 FPS
     relogio.tick(60)
 
-#Funcoes.introducao()
+Funcoes.introducao()
 numeroJogadores = Funcoes.escolhe_numero_jogadores()
 dificuldade = Funcoes.escolhe_dificuldade()
 velocidade = Funcoes.define_velocidade_da_bola(dificuldade)

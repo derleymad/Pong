@@ -44,7 +44,6 @@ def escolhe_numero_jogadores():
 
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
-                loopdo = False
                 pygame.quit()
                 exit()
 
@@ -84,8 +83,8 @@ def introducao():
 
     for evento in pygame.event.get():
         if evento.type == pygame.QUIT:
-            loopdojogo = False
             pygame.quit()
+            exit()
 
     tela.fill(preto)
     pygame.time.delay(1000)
@@ -116,8 +115,8 @@ def introducao():
     while comeca:
         for ev in pygame.event.get():
             if ev.type == pygame.QUIT:
-                comeca = False
                 pygame.quit()
+                exit()
             if ev.type == pygame.KEYDOWN:
                 comeca = False
             if ev.type == pygame.MOUSEBUTTONDOWN:
@@ -160,7 +159,6 @@ def pausa():
 
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
-                loopdo = False
                 pygame.quit()
                 exit()
 
@@ -172,7 +170,6 @@ def pausa():
                     escolha = 2
                     loop = False
                 if evento.key == K_ESCAPE:
-                    loop = False
                     pygame.quit()
                     exit()
 
@@ -198,7 +195,6 @@ def fim_de_jogo():
 
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
-                loopdo = False
                 pygame.quit()
                 exit()
 
@@ -207,7 +203,6 @@ def fim_de_jogo():
                     escolha = 2
                     loop = False
                 if evento.key == K_ESCAPE:
-                    loop = False
                     pygame.quit()
                     exit()
 
@@ -225,7 +220,6 @@ def escolhe_dificuldade():
 
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
-                loopdo = False
                 pygame.quit()
                 exit()
 
@@ -237,7 +231,6 @@ def escolhe_dificuldade():
                     dificuldade = 2
                     loop = False
                 if evento.key == K_ESCAPE:
-                    loop = False
                     pygame.quit()
                     exit()
 
