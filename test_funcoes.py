@@ -23,3 +23,22 @@ def test_velocidade_barra_bot_3():
 
 def test_velocidade_barra_bot_4():
     assert velocidade_barra_bot(-1) == 0
+    
+def test_velocidade_barra_quando_temos_um_jogador_e_dificuldade_facil():
+    velocidade_barra_jogadores(1, 1)
+    assert jogador1.velocidade == 5
+
+def test_velocidade_barra_quando_temos_um_jogador_e_dificuldade_dificil():
+    velocidade_barra_jogadores(1, 2)
+    assert jogador1.velocidade == 5.5
+
+def test_velocidade_barra_quando_temos_dois_jogadores_e_dificuldade_facil():
+    velocidade_barra_jogadores(2, 1)
+    assert jogador1.velocidade == 5
+    assert jogador2.velocidade == 5
+
+def test_velocidade_barra_quando_temos_dois_jogadores_e_dificuldade_dificil():
+    velocidade_barra_jogadores(2, 2)
+    assert jogador1.velocidade == 5.5
+    assert jogador2.velocidade == 5.5
+    
