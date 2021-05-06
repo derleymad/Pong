@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from Atributos import *
 from Player import *
 from Bola import *
@@ -256,6 +257,7 @@ def velocidade_barra_bot(dificuldade):
         return 4.5
     elif dificuldade == 2:
         return 7.43
+    else: return 0
 
 def velocidade_barra_jogadores(numeroJogadores, dificuldade):
     if dificuldade == 1:

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 largura = 800
 altura = 600
 
