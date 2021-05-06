@@ -1,5 +1,6 @@
 largura = 800
 altura = 600
+
 loopdojogo = True
 reinicia = 0
 
@@ -10,7 +11,6 @@ branco = (255, 255, 255)
 preto = (0, 0, 0, 0)
 cinza = (25, 25, 25)
 
-velocidadePadraoBot = 4.5
 velocidadeXFacilPadrao = 5
 velocidadeYFacilPadrao = 5
 
