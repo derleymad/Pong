@@ -44,3 +44,6 @@ def test_velocidade_dificil():
 
 def test_velocidade_invalido():
     assert define_velocidade_da_bola(-5) == 0
+    
+def test_escolhe_numero_de_jogadores():
+    assert escolhe_numero_jogadores() == 1 or escolhe_numero_jogadores() == 2
