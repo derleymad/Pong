@@ -16,4 +16,6 @@ def define_velocidade_da_bola(dificuldade):
         velocidade = [velocidadeXFacilPadrao, velocidadeYFacilPadrao]
     elif dificuldade == 2:
         velocidade = [velocidadeXDificilPadrao, velocidadeYDificilPadrao]
+    else:
+        velocidade = 0
     return velocidade

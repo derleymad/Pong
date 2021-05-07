@@ -247,10 +247,12 @@ def movimenta_jogadores(bolarect, numeroJogadores):
 
 def velocidade_barra_bot(dificuldade):
     if dificuldade == 1:
-        return 4.5
+        velocidade = 4.5
     elif dificuldade == 2:
-        return 7.43
-    else: return 0
+        velocidade = 7.43
+    else: 
+        velocidade = 0
+    return velocidade
 
 def velocidade_barra_jogadores(numeroJogadores, dificuldade):
     if dificuldade == 1:
