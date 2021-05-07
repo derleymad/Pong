@@ -27,13 +27,13 @@ def test_velocidade_barra_bot():
     assert velocidade_barra_bot('String') == 0
 
 # Caixa Branca
-def test_velocidade_barra_bot_1():
+def test_velocidade_barra_bot_facil():
     assert velocidade_barra_bot(1) == 4.5
 
-def test_velocidade_barra_bot_2():
+def test_velocidade_barra_bot_dificil():
     assert velocidade_barra_bot(2) == 7.43
 
-def test_velocidade_barra_bot_3():
+def test_velocidade_barra_bot_invalido():
     assert velocidade_barra_bot(3) == 0
 
 def test_velocidade_facil():
